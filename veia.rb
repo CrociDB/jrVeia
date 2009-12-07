@@ -20,6 +20,11 @@ class Veia < JFrame
 	
 	# For the events...
 	include java.awt.event.ActionListener
+	
+	# Constants
+	C_V = 0
+	C_X = 1
+	C_O = 2
 
 	def initialize
 		super("jrVeia - by CrociDB")
@@ -28,15 +33,18 @@ class Veia < JFrame
 		set_default_close_operation(JFrame::EXIT_ON_CLOSE)
 		set_layout(nil)
 		
-		# Building the interface
-		build_interface
-		
 		# Current Player Attribute
 		@playerx = true
 		
 		# Players points
 		@points_player1 = 0
 		@points_player2 = 0
+		
+		# Main Board Matrix
+		@board = Array.new(9)
+		
+		# Building the interface
+		build_interface
 	end
 	
 	def build_interface
@@ -54,6 +62,8 @@ class Veia < JFrame
 			@buttons[i] = JButton.new ""
 			@buttons[i].add_action_listener(self)
 			@main_panel.add(@buttons[i])
+			
+			@board[i] = C_V
 		end
 		
 		# The HUD
@@ -87,6 +97,10 @@ class Veia < JFrame
 		# Check exit button
 		if e.get_source == @exit
 			puts "Now it should leave..."
+			
+			@board.each do |b|
+				puts b
+			end
 		end
 		
 		# Check Reset Game button
@@ -96,15 +110,17 @@ class Veia < JFrame
 			end
 		end
 		
-		# Check the buttons board
-		@buttons.each do |b|
-			if e.get_source == b
+		# Check the buttons board		
+		9.times do |i|
+			if e.get_source == @buttons[i]
 				if @playerx
-					b.set_text "X"
+					@buttons[i].set_text "X"
+					@board[i] = C_X
 				else
-					b.set_text "O"
+					@buttons[i].set_text "O"
+					@board[i] = C_O
 				end
-				
+			
 				switch_current_player
 			end
 		end
@@ -126,6 +142,7 @@ class Veia < JFrame
 		# Reset the board
 		9.times do |i|
 			@buttons[i].set_text("")
+			@board[i] = C_V
 		end
 		
 		# Reset the Points
