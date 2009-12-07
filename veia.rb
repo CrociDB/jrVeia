@@ -13,6 +13,7 @@ JFrame = javax.swing.JFrame
 JPanel = javax.swing.JPanel
 JButton = javax.swing.JButton
 JLabel = javax.swing.JLabel
+JOptionPane = javax.swing.JOptionPane
 
 # Main Window Class
 class Veia < JFrame
@@ -32,6 +33,10 @@ class Veia < JFrame
 		
 		# Current Player Attribute
 		@playerx = true
+		
+		# Players points
+		@points_player1 = 0
+		@points_player2 = 0
 	end
 	
 	def build_interface
@@ -60,7 +65,7 @@ class Veia < JFrame
 		@hud_player1.set_bounds(220, 90, 100, 20)
 		add(@hud_player1)
 		
-		@hud_player2 = JLabel.new "Player Y: 0"
+		@hud_player2 = JLabel.new "Player O: 0"
 		@hud_player2.set_bounds(220, 110, 100, 20)
 		add(@hud_player2)
 		
@@ -82,6 +87,13 @@ class Veia < JFrame
 		# Check exit button
 		if e.get_source == @exit
 			puts "Now it should leave..."
+		end
+		
+		# Check Reset Game button
+		if e.get_source == @reset
+			if JOptionPane.showConfirmDialog(nil, "Are you sure you want to reset the current game?") == 0
+				reset_game
+			end
 		end
 		
 		# Check the buttons board
@@ -107,6 +119,25 @@ class Veia < JFrame
 			@playerx = true
 			@current_player.set_text "Current Player: X"
 		end		
+	end
+	
+	# This method resets the board and the points of the game
+	def reset_game
+		# Reset the board
+		9.times do |i|
+			@buttons[i].set_text("")
+		end
+		
+		# Reset the Points
+		@points_player1 = 0
+		@points_player2 = 0
+		
+		@hud_player1.set_text("Player X: 0")
+		@hud_player2.set_text("Player O: 0")
+		
+		# Setting the X Player to start
+		@playerx = true
+		@current_player.set_text "Current Player: X"
 	end
 end
 
