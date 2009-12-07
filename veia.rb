@@ -10,6 +10,7 @@ require 'java'
 
 # Using this classes
 JFrame = javax.swing.JFrame
+JPanel = javax.swing.JPanel
 JButton = javax.swing.JButton
 
 # Main Window Class
@@ -30,8 +31,13 @@ class Veia < JFrame
 	end
 	
 	def build_interface
+		@main_panel = JPanel.new
+		@main_panel.set_bounds(10, 10, 300, 300)
+		
+		add(@main_panel)
+	
 		@exit = JButton.new "Exit"
-		@exit.set_bounds(10, 10, 100, 100)
+		@exit.set_bounds(500, 400, 100, 30)
 		@exit.add_action_listener(self)
 		
 		add(@exit)
@@ -40,7 +46,7 @@ class Veia < JFrame
 	# Events method
 	def actionPerformed(e)
 		if e.get_source == @exit
-			puts "teste"
+			
 		end
 	end
 end
