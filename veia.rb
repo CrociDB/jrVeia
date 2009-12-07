@@ -8,7 +8,7 @@
 # It's gonna use java classes
 require 'java'
 
-# Using this classes
+# Using these classes
 JFrame = javax.swing.JFrame
 JPanel = javax.swing.JPanel
 JButton = javax.swing.JButton
@@ -30,6 +30,7 @@ class Veia < JFrame
 		# Building the interface
 		build_interface
 		
+		# Current Player Attribute
 		@playerx = true
 	end
 	
@@ -67,24 +68,24 @@ class Veia < JFrame
 		@reset = JButton.new "Reset Game"
 		@reset.set_bounds(220, 140, 200, 30)
 		@reset.add_action_listener(self)
-		
 		add(@reset)
 		
 		# The exit button	
 		@exit = JButton.new "Exit"
 		@exit.set_bounds(220, 180, 200, 30)
 		@exit.add_action_listener(self)
-		
 		add(@exit)
 	end
 	
 	# Events method
 	def actionPerformed(e)
+		# Check exit button
 		if e.get_source == @exit
 			puts "Now it should leave..."
 		end
 		
-		@buttons.each { |b|
+		# Check the buttons board
+		@buttons.each do |b|
 			if e.get_source == b
 				if @playerx
 					b.set_text "X"
@@ -94,7 +95,7 @@ class Veia < JFrame
 				
 				switch_current_player
 			end
-		}
+		end
 	end
 	
 	# Switch the current player
