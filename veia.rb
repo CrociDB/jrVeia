@@ -12,6 +12,7 @@ require 'java'
 JFrame = javax.swing.JFrame
 JPanel = javax.swing.JPanel
 JButton = javax.swing.JButton
+JLabel = javax.swing.JLabel
 
 # Main Window Class
 class Veia < JFrame
@@ -28,6 +29,8 @@ class Veia < JFrame
 		
 		# Building the interface
 		build_interface
+		
+		@playerx = true
 	end
 	
 	def build_interface
@@ -47,6 +50,26 @@ class Veia < JFrame
 			@main_panel.add(@buttons[i])
 		end
 		
+		# The HUD
+		@current_player = JLabel.new "Current Player: X"
+		@current_player.set_bounds(220, 10, 100, 50)
+		add(@current_player)
+		
+		@hud_player1 = JLabel.new "Player X: 0"
+		@hud_player1.set_bounds(220, 90, 100, 20)
+		add(@hud_player1)
+		
+		@hud_player2 = JLabel.new "Player Y: 0"
+		@hud_player2.set_bounds(220, 110, 100, 20)
+		add(@hud_player2)
+		
+		# The reset button
+		@reset = JButton.new "Reset Game"
+		@reset.set_bounds(220, 140, 200, 30)
+		@reset.add_action_listener(self)
+		
+		add(@reset)
+		
 		# The exit button	
 		@exit = JButton.new "Exit"
 		@exit.set_bounds(220, 180, 200, 30)
@@ -63,9 +86,26 @@ class Veia < JFrame
 		
 		@buttons.each { |b|
 			if e.get_source == b
-				b.set_text "X"
+				if @playerx
+					b.set_text "X"
+				else
+					b.set_text "O"
+				end
+				
+				switch_current_player
 			end
 		}
+	end
+	
+	# Switch the current player
+	def switch_current_player
+		if @playerx
+			@playerx = false
+			@current_player.set_text "Current Player: O"
+		else
+			@playerx = true
+			@current_player.set_text "Current Player: X"
+		end		
 	end
 end
 
