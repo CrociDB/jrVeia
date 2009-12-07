@@ -19,9 +19,9 @@ class Veia < JFrame
 	# For the events...
 	include java.awt.event.ActionListener
 
-	def initialize(title)
-		super(title)
-		set_size(640,480)
+	def initialize
+		super("jrVeia - by CrociDB")
+		set_size(445,260)
 		set_visible(true)
 		set_default_close_operation(JFrame::EXIT_ON_CLOSE)
 		set_layout(nil)
@@ -31,13 +31,25 @@ class Veia < JFrame
 	end
 	
 	def build_interface
+		# The panel with the buttons
 		@main_panel = JPanel.new
-		@main_panel.set_bounds(10, 10, 300, 300)
+		@main_panel.set_bounds(10, 10, 200, 200)
+		@main_panel.set_layout(java.awt.GridLayout.new(3,3,10,10))
 		
 		add(@main_panel)
-	
+		
+		# All the nine buttons
+		@buttons = Array.new(9, JButton)
+		
+		9.times do |i|
+			@buttons[i] = JButton.new ""
+			@buttons[i].add_action_listener(self)
+			@main_panel.add(@buttons[i])
+		end
+		
+		# The exit button	
 		@exit = JButton.new "Exit"
-		@exit.set_bounds(500, 400, 100, 30)
+		@exit.set_bounds(220, 180, 200, 30)
 		@exit.add_action_listener(self)
 		
 		add(@exit)
@@ -48,8 +60,14 @@ class Veia < JFrame
 		if e.get_source == @exit
 			
 		end
+		
+		@buttons.each { |b|
+			if e.get_source == b
+				b.set_text "X"
+			end
+		}
 	end
 end
 
 # Here is the magic... hehe
-Veia.new "Teste"
+Veia.new
