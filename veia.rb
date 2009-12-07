@@ -58,7 +58,7 @@ class Veia < JFrame
 	# Events method
 	def actionPerformed(e)
 		if e.get_source == @exit
-			
+			puts "Now it should leave..."
 		end
 		
 		@buttons.each { |b|
