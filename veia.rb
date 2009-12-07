@@ -25,6 +25,8 @@ class Veia < JFrame
 	C_V = 0
 	C_X = 1
 	C_O = 2
+	C_XV = 3
+	C_OV = 4
 
 	def initialize
 		super("jrVeia - by CrociDB")
@@ -122,6 +124,8 @@ class Veia < JFrame
 				end
 			
 				switch_current_player
+				
+				check_board
 			end
 		end
 	end
@@ -155,6 +159,23 @@ class Veia < JFrame
 		# Setting the X Player to start
 		@playerx = true
 		@current_player.set_text "Current Player: X"
+	end
+	
+	# Gets the position of the Vector by a given Matrix coordinates
+	def get_vector_position(x, y)
+		@board[x+y*3]
+	end
+	
+	# Checks the board to get the winner
+	def check_board	
+		if recursive_check_board
+			JOptionPane.showMessageDialog(nil, "The Winner is: #{@type}")
+		end
+	end
+	
+	# Recursive Check board
+	def recursive_check_board
+		false
 	end
 end
 
