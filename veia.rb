@@ -25,8 +25,6 @@ class Veia < JFrame
 	C_V = 0
 	C_X = 1
 	C_O = 2
-	C_XV = 3
-	C_OV = 4
 
 	def initialize
 		super("jrVeia - by CrociDB")
