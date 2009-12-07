@@ -1,4 +1,9 @@
-jrVeia
+-------------------------------------
+                jrVeia
+-------------------------------------
+
+
+Introduction
 --------------------
 
 
@@ -7,6 +12,16 @@ This is a simple Tic-Tac-Toe game I made using jRuby and Java's Swing for study.
 I intend do make this game online with java sockets. But first I'll get this working offline. =D
 
 
+
+TODOs
 --------------------
+
+I'll list here some of the TODO's for the first release:
+
+ -> Implement the recursive algorithm for validating the game board;
+ -> Make a better HUD;
+
+
+-------------------------------------
 by CrociDB
 http://crocidb.com/
