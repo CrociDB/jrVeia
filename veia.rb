@@ -1,3 +1,5 @@
+#!/usr/bin/jruby
+
 #
 # A Simple Tic-Tac-Toe Game with jRuby and Java's Swing
 #
