@@ -7,6 +7,7 @@
 # http://crocidb.com/
 #
 
+
 # It's gonna use java classes
 require 'java'
 
@@ -16,6 +17,7 @@ JPanel = javax.swing.JPanel
 JButton = javax.swing.JButton
 JLabel = javax.swing.JLabel
 JOptionPane = javax.swing.JOptionPane
+System = java.lang.System
 
 # Main Window Class
 class Veia < JFrame
@@ -27,11 +29,10 @@ class Veia < JFrame
 	C_V = 0
 	C_X = 1
 	C_O = 2
-
+		
 	def initialize
-		super("jrVeia - by CrociDB")
+		super("Tic-Tac-Toe")
 		set_size(445,260)
-		set_visible(true)
 		set_default_close_operation(JFrame::EXIT_ON_CLOSE)
 		set_layout(nil)
 		
@@ -39,14 +40,15 @@ class Veia < JFrame
 		@playerx = true
 		
 		# Players points
-		@points_player1 = 0
-		@points_player2 = 0
-		
+    	@points_player1 = 0
+    	@points_player2 = 0
+    	
 		# Main Board Matrix
 		@board = Array.new(9)
 		
 		# Building the interface
 		build_interface
+		set_visible(true) #better this way
 	end
 	
 	def build_interface
@@ -58,10 +60,10 @@ class Veia < JFrame
 		add(@main_panel)
 		
 		# All the nine buttons
-		@buttons = Array.new(9, JButton)
+		@buttons = Array.new(9)
 		
 		9.times do |i|
-			@buttons[i] = JButton.new ""
+			@buttons[i] = JButton.new("")
 			@buttons[i].add_action_listener(self)
 			@main_panel.add(@buttons[i])
 			
@@ -69,15 +71,15 @@ class Veia < JFrame
 		end
 		
 		# The HUD
-		@current_player = JLabel.new "Current Player: X"
+		@current_player = JLabel.new "Player: X"
 		@current_player.set_bounds(220, 10, 100, 50)
 		add(@current_player)
 		
-		@hud_player1 = JLabel.new "Player X: 0"
+		@hud_player1 = JLabel.new "Player X: "+@points_player1.to_s
 		@hud_player1.set_bounds(220, 90, 100, 20)
 		add(@hud_player1)
 		
-		@hud_player2 = JLabel.new "Player O: 0"
+		@hud_player2 = JLabel.new "Player O: "+@points_player2.to_s
 		@hud_player2.set_bounds(220, 110, 100, 20)
 		add(@hud_player2)
 		
@@ -98,11 +100,8 @@ class Veia < JFrame
 	def actionPerformed(e)
 		# Check exit button
 		if e.get_source == @exit
-			puts "Now it should leave..."
-			
-			@board.each do |b|
-				puts b
-			end
+		    JOptionPane.showMessageDialog nil,"Bye-bye"
+		    System.exit(JFrame::EXIT_ON_CLOSE)
 		end
 		
 		# Check Reset Game button
@@ -115,17 +114,19 @@ class Veia < JFrame
 		# Check the buttons board		
 		9.times do |i|
 			if e.get_source == @buttons[i]
-				if @playerx
+				if @playerx and @board[i] == C_V
 					@buttons[i].set_text "X"
 					@board[i] = C_X
-				else
+					switch_current_player
+    				check_board
+				elsif @board[i] == C_V
 					@buttons[i].set_text "O"
 					@board[i] = C_O
+					switch_current_player
+    				check_board
 				end
-			
-				switch_current_player
-				
-				check_board
+				@hud_player1.set_text("Player X: "+@points_player1.to_s)
+            	@hud_player2.set_text("Player O: "+@points_player2.to_s)
 			end
 		end
 	end
@@ -134,49 +135,123 @@ class Veia < JFrame
 	def switch_current_player
 		if @playerx
 			@playerx = false
-			@current_player.set_text "Current Player: O"
+			@current_player.set_text("Player: O")
 		else
 			@playerx = true
-			@current_player.set_text "Current Player: X"
+			@current_player.set_text("Player: X")
 		end		
 	end
 	
 	# This method resets the board and the points of the game
 	def reset_game
-		# Reset the board
-		9.times do |i|
-			@buttons[i].set_text("")
-			@board[i] = C_V
-		end
+		#Reset the board
+		reset_board
 		
 		# Reset the Points
 		@points_player1 = 0
 		@points_player2 = 0
 		
-		@hud_player1.set_text("Player X: 0")
-		@hud_player2.set_text("Player O: 0")
+		@hud_player1.set_text("Player X: "+@points_player1.to_s)
+		@hud_player2.set_text("Player O: "+@points_player2.to_s)
 		
 		# Setting the X Player to start
 		@playerx = true
-		@current_player.set_text "Current Player: X"
+		@current_player.set_text "Player: X"
 	end
 	
+	#This method resets the board
+	def reset_board
+        # Reset the board
+		9.times do |i|
+			@buttons[i].set_text("")
+			@board[i] = C_V
+		end
+    end
+	
 	# Gets the position of the Vector by a given Matrix coordinates
-	def get_vector_position(x, y)
+	# x for row and y for column
+	def vector_value(x, y)
 		@board[x+y*3]
 	end
 	
 	# Checks the board to get the winner
-	def check_board	
-		if recursive_check_board
-			JOptionPane.showMessageDialog(nil, "The Winner is: #{@type}")
-		end
-	end
-	
-	# Recursive Check board
-	def recursive_check_board
-		false
-	end
+    def check_board	
+        #Winner checker
+        @winner = false
+
+        #Checking the rows
+        3.times do |x|
+            if !@winner
+                if vector_value(x,0) == vector_value(x,1) and vector_value(x,1) == vector_value(x,2) and vector_value(x,2) != C_V
+                    if vector_value(x,2) == C_X
+                        JOptionPane.showMessageDialog nil,"Player X is the winner!"
+                        @points_player1 += 1
+                    elsif vector_value(x,2) == C_O
+                        JOptionPane.showMessageDialog nil,"Player O is the winner!"
+                        @points_player2 += 1
+                    end
+                    reset_board
+                    @winner = true
+                end
+            end
+        end
+
+        #Checking the columns
+        if !@winner
+            3.times do |y|
+                if !@winner
+                    if vector_value(0,y) == vector_value(1,y) and vector_value(1,y) == vector_value(2,y) and vector_value(2,y) != C_V 
+                        if vector_value(2,y) == C_X
+                            JOptionPane.showMessageDialog nil,"Player X is the winner!"
+                            @points_player1 += 1
+                        elsif vector_value(2,y) == C_O
+                            JOptionPane.showMessageDialog nil,"Player O is the winner!"
+                            @points_player2 += 1
+                        end 
+                        reset_board
+                        @winner = true
+                    end
+                end
+            end
+        end
+
+        #Checking the diagonals
+        if !@winner
+            if vector_value(0,0) == vector_value(1,1) and vector_value(1,1) == vector_value(2,2) and vector_value(2,2) != C_V
+                if vector_value(2,2) == C_X
+                    JOptionPane.showMessageDialog nil,"Player X is the winner!"
+                    @points_player1 += 1
+                elsif vector_value(2,2) == C_O
+                    JOptionPane.showMessageDialog nil,"Player O is the winner!"
+                    @points_player2 += 1
+                end
+                reset_board
+                @winner = true
+            elsif vector_value(0,2) == vector_value(1,1) and vector_value(1,1) == vector_value(2,0) and vector_value(2,0) != C_V
+                if vector_value(2,0) == C_X
+                    JOptionPane.showMessageDialog nil,"Player X is the winner!"
+                    @points_player1 += 1
+                elsif vector_value(2,0) == C_O
+                    JOptionPane.showMessageDialog nil,"Player O is the winner!"
+                    @points_player2 += 1
+                end
+                reset_board
+                @winner = true
+            else #Checking no winner
+                @empty_board = false
+                @board.each do |i|
+                    if i == C_V
+                        @empty_board = true
+                        break
+                    end
+                end
+                if !@empty_board
+                    JOptionPane.showMessageDialog nil, "No winner, the game will restart"
+                    reset_board
+                end
+            end
+        end
+    end
 end
 
 # Here is the magic... hehe
