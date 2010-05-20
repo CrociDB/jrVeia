@@ -1,27 +1,38 @@
--------------------------------------
-                jrVeia
--------------------------------------
+--------------------------------------------------------------------
+                              jrVeia
+--------------------------------------------------------------------
 
 
-Introduction
---------------------
+Introduction & Goal
+--------------------------------------------------------------------
 
+  This is a simple Tic-Tac-Toe game I made using jRuby and Java's Swing for study. 
+  I intend do make this game online with java sockets.
 
-This is a simple Tic-Tac-Toe game I made using jRuby and Java's Swing for study.
-
-I intend do make this game online with java sockets. But first I'll get this working offline. =D
-
+  The main goal of this project is to study technologies such as jRuby, Ruby, Java, Sockets, etc.
 
 
 TODOs
---------------------
+--------------------------------------------------------------------
 
-I'll list here some of the TODO's for the first release:
-
-
- -> Make a better HUD;
+   -> Make a better HUD;
+   -> Make the game online.
 
 
--------------------------------------
+License
+--------------------------------------------------------------------
+
+  This program uses the MIT License. For more details, see the LICENSE file.
+
+
+Contribute
+--------------------------------------------------------------------
+
+  I appreciate every single line of code. If you want to help, feel free to fork this project.
+
+  See the AUTHORS files.
+
+
+--------------------------------------------------------------------
 by CrociDB
 http://crocidb.com/
