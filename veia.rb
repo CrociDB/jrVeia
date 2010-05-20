@@ -46,6 +46,9 @@ class Veia < JFrame
 		# Main Board Matrix
 		@board = Array.new(9)
 		
+		# Number of moves
+		@moves = 0
+		
 		# Building the interface
 		build_interface
 		set_visible(true) #better this way
@@ -118,13 +121,16 @@ class Veia < JFrame
 					@buttons[i].set_text "X"
 					@board[i] = C_X
 					switch_current_player
-    				check_board
+    				@moves += 1
 				elsif @board[i] == C_V
 					@buttons[i].set_text "O"
 					@board[i] = C_O
 					switch_current_player
-    				check_board
+    				@moves += 1
 				end
+				if @moves > 4
+				    check_board
+			    end
 				@hud_player1.set_text("Player X: "+@points_player1.to_s)
             	@hud_player2.set_text("Player O: "+@points_player2.to_s)
 			end
@@ -176,10 +182,13 @@ class Veia < JFrame
 	
 	# Checks the board to get the winner
     def check_board	
-        #Winner checker
+        # Winner checker
         @winner = false
+        
+        # Board's status
+        @empty_board = false
 
-        #Checking the rows
+        # Checking the rows
         3.times do |x|
             if !@winner
                 if vector_value(x,0) == vector_value(x,1) and vector_value(x,1) == vector_value(x,2) and vector_value(x,2) != C_V
@@ -191,6 +200,7 @@ class Veia < JFrame
                         @points_player2 += 1
                     end
                     reset_board
+                    @moves = 0
                     @winner = true
                 end
             end
@@ -209,6 +219,7 @@ class Veia < JFrame
                             @points_player2 += 1
                         end 
                         reset_board
+                        @moves = 0
                         @winner = true
                     end
                 end
@@ -226,6 +237,7 @@ class Veia < JFrame
                     @points_player2 += 1
                 end
                 reset_board
+                @moves = 0
                 @winner = true
             elsif vector_value(0,2) == vector_value(1,1) and vector_value(1,1) == vector_value(2,0) and vector_value(2,0) != C_V
                 if vector_value(2,0) == C_X
@@ -236,9 +248,9 @@ class Veia < JFrame
                     @points_player2 += 1
                 end
                 reset_board
+                @moves = 0
                 @winner = true
             else #Checking no winner
-                @empty_board = false
                 @board.each do |i|
                     if i == C_V
                         @empty_board = true
@@ -248,6 +260,7 @@ class Veia < JFrame
                 if !@empty_board
                     JOptionPane.showMessageDialog nil, "No winner, the game will restart"
                     reset_board
+                    @moves = 0
                 end
             end
         end
